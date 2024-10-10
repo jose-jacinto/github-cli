@@ -2,12 +2,13 @@ import 'dotenv/config';
 import { Command } from 'commander';
 import process from 'node:process';
 import { Endpoints, OctokitResponse } from "@octokit/types";
-
-import { insertUserWithLanguages } from './database';
+import { insertUserWithLanguages, fetchUsers } from './database';
 
 const program = new Command();
 const gitHubUsernameRegex =
   new RegExp(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i)
+
+const countryNameRegex = new RegExp(/^[A-Za-z\s]{1,}$/);
 
 program
   .version('1.0.0')
@@ -64,13 +65,14 @@ program
       }
      
       // Convert github user id to external_id to our users table
-      await insertUserWithLanguages({
+      const userInDb = await insertUserWithLanguages({
         email: user.data.email,
         username: options.username,
         external_id: user.data.id,
         location: user.data.location,
         created_at: user.data.created_at
       }, knownLanguages);
+      console.log('User inserted successfully with id:', userInDb.id);
 
     } catch (error) {
       if (error instanceof RequestError && error.status === 404) {
@@ -85,8 +87,31 @@ program
 
 program
   .command('ls')
-  .action(async () => {
+  .option('-l, --location <location>', `User's location`)
+  .option('-lang, --language <language>', `User's programming language`)
+  .action(async (options) => {
+    if (options.location) {
+      console.log(`Fetching users by location...`);
+      if (!countryNameRegex.test(options.location)) {
+        console.log('Invalid location. Exiting...');
+        return;
+      }
+      const users =
+        await fetchUsers({ column: 'location', value: options.location });
+      console.table(users);
+    } else if (options.language) {
+      console.log(`Fetching users by programming language`);
 
+      const users =
+        await fetchUsers([options.language]);
+      console.table(users);
+    } else {
+      const users =
+        await fetchUsers(null);
+      console.table(users);
+    }
+    
+    process.exit(0);
   })
 
 async function main() {

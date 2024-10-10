@@ -19,6 +19,12 @@ docker run --name lovelystay-home-task -p 5432:5432 -e POSTGRES_PASSWORD=yapostg
 
 ## Design Decisions
 
+
+ 🔨 Not supported 🔨 : unnest is not supported
+
+    👉 pg-mem is work-in-progress, and it would seem that you've hit one of its limits.
+
+    
 ## Challenges & Improvements
 
 Goal is to develop a command-line application using NodeJS + TypeScript + PostgreSQL.
