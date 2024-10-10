@@ -7,7 +7,14 @@
 ## Getting Started
 
 ### Prerequisities
+
+1. Docker is installed
 ### Installation
+
+```
+docker run --name lovelystay-home-task -p 5432:5432 -e POSTGRES_PASSWORD=yapostgres -e POSTGRES_DB=lovelystay -d postgres
+
+```
 ### Usage
 
 ## Design Decisions
