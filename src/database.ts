@@ -27,6 +27,7 @@ interface UserFieldSearch {
   value: string | number;
 }
 type UserSearch = UserFieldSearch | string[];
+
 class DatabaseError extends Error {
   constructor(message: string) {
     super(message);
@@ -205,7 +206,6 @@ async function fetchUsers(
       } else if (Array.isArray(search) && search.length > 0) {
         
         // Searching by programming languages
-
         whereClause = `
           WHERE u.id IN (
             SELECT ul.user_id
@@ -217,7 +217,6 @@ async function fetchUsers(
           )
         `;
         params = [search, search.length];
-        
       }
 
       query += whereClause + ' GROUP BY u.id ORDER BY u.id';
@@ -226,7 +225,6 @@ async function fetchUsers(
 
       // Filter out users with empty language arrays
       return users.filter(user => user.languages.length > 0);
-
     } catch (error) {
       console.error('Database error:', error);
       return new DatabaseError((error as Error).message);

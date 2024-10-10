@@ -5,6 +5,19 @@ import process from 'node:process';
 import { Endpoints, OctokitResponse } from "@octokit/types";
 import { insertUserWithLanguages, fetchUsers } from './database';
 
+// Produces types for octokit response
+type listUserReposResponse =
+  Endpoints["GET /users/{username}/repos"]["response"];
+
+// Extract the element type from the response array
+type ExtractArrayType<T> =
+  T extends OctokitResponse<infer U, any> ? U : never;
+type ArrayType = ExtractArrayType<listUserReposResponse>;
+
+// Extract the element type from the array
+type ExtractElementType<T> = T extends (infer U)[] ? U : never;
+type ElementType = ExtractElementType<ArrayType>;
+
 const program = new Command();
 const gitHubUsernameRegex =
   new RegExp(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i)
@@ -30,18 +43,6 @@ program
     // Octokit needs to be a ESM module however will not change
     // the initial setup to accomodate this, so we will use dynamic imports
     const { Octokit, RequestError } = await import('octokit');
-    type listUserReposResponse =
-      Endpoints["GET /users/{username}/repos"]["response"];
-
-    // Extract the element type from the response array
-    type ExtractArrayType<T> =
-      T extends OctokitResponse<infer U, any> ? U : never;
-    type ArrayType = ExtractArrayType<listUserReposResponse>;
-    
-    // Extract the element type from the array
-    type ExtractElementType<T> = T extends (infer U)[] ? U : never;
-    type ElementType = ExtractElementType<ArrayType>;
-
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
     try {
       const user = await octokit.request(`GET /users/${options.username}`, {
@@ -73,8 +74,11 @@ program
         location: user.data.location,
         created_at: user.data.created_at
       }, knownLanguages);
-      console.log('User inserted successfully with id:', userInDb.id);
 
+      if (userInDb) {
+        console.log('User inserted successfully with id:', userInDb.id);
+      }
+      
     } catch (error) {
       if (error instanceof RequestError && error.status === 404) {
         console.log('User not found');
@@ -102,7 +106,6 @@ program
       console.table(users);
     } else if (options.language) {
       console.log(`Fetching users by programming language`);
-
       const users =
         await fetchUsers([options.language]);
       console.table(users);

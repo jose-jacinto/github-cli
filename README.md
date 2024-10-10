@@ -34,10 +34,11 @@ It allows all user listing, filtering by columns (eg user's location) and user's
 1. Docker is installed
 2. Nodejs is installed
 3. Get a github token here 👉 [https://github.com/settings/tokens]https://github.com/settings/tokens
-4. Create a `.env` file in the root of the project and assign it to the variable `GITHUB_TOKEN`. The file should look like this:
+4. (optional) Create a `.env` file in the root of the project and assign it to the variable `GITHUB_TOKEN`. The file should look like this:
 ```sh
 GITHUB_TOKEN=ghp_llkJG ...
 ```
+> Although we are fetching public data from Github's API, having a token increases the rate limit available to the user. 
 
 ### Installation
 
@@ -89,6 +90,8 @@ npm run test
 
 ### Github
 Octokit was used to manage Github's Rest API. It provides type safety with all the best practices.
+Since location as a github's users attribute is arbitrary and unformatted string, it could be helpful to have a small formatter to normalise the country of the user
+
 > [!IMPORTANT]
 > Currently by fetching the user's repositories is enough to get the `main` programming language used.
 > It is, however, possible to also get the complete set of languages used in the repo. This involves additional GETs for each repository
@@ -114,5 +117,5 @@ Migrations are not being tested as their own deployment mechanics are not in the
  🔨 Not supported 🔨 : unnest is not supported
     👉 pg-mem is work-in-progress, and it would seem that you've hit one of its limits.
 ```
-I decided against refactoring database function's code and went to use the same db instance with a database especific for tests (github_fetch_test).
+Because of this I decided against refactoring database function's code and went to use the same db instance with a database especific for tests (github_fetch_test).
 
