@@ -1,5 +1,4 @@
 import pgPromise from 'pg-promise';
-// import { exec } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';
 import { DatabaseError } from 'pg';
@@ -9,9 +8,9 @@ const pgp = pgPromise();
 const config = {
   host: 'localhost',
   port: 5432,
-  database: 'lovelystay', // Default database to connect initially
-  user: 'postgres', // Replace with your PostgreSQL username
-  password: 'yapostgres' // Replace with your PostgreSQL password
+  database: 'lovelystay',
+  user: 'postgres',
+  password: 'yapostgres'
 };
 
 const newDbName = 'github_fetch';

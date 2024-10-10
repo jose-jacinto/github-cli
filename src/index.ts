@@ -19,9 +19,13 @@ type ExtractElementType<T> = T extends (infer U)[] ? U : never;
 type ElementType = ExtractElementType<ArrayType>;
 
 const program = new Command();
+
+// Regular expressions for validating username input
 const gitHubUsernameRegex =
   new RegExp(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i)
 
+// Regular expression for validating country name input.
+// Todo: This regex is very basic and can be improved
 const countryNameRegex = new RegExp(/^[A-Za-z\s]{1,}$/);
 
 program
@@ -92,6 +96,7 @@ program
 
 program
   .command('list')
+  .description('Lists all or filtered github profile stored in the database')
   .option('-loc, --location <location>', `User's location`)
   .option('-lang, --language <language>', `User's programming language`)
   .action(async (options) => {
