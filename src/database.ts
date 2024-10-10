@@ -5,7 +5,7 @@ const pgp = pgPromise();
 const config = {
   host: 'localhost',
   port: 5432,
-  database: 'github_profiler',
+  database: 'github_fetch',
   user: 'postgres',
   password: 'yapostgres'
 };

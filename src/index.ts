@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import 'dotenv/config';
 import { Command } from 'commander';
 import process from 'node:process';
@@ -86,8 +87,8 @@ program
   })
 
 program
-  .command('ls')
-  .option('-l, --location <location>', `User's location`)
+  .command('list')
+  .option('-loc, --location <location>', `User's location`)
   .option('-lang, --language <language>', `User's programming language`)
   .action(async (options) => {
     if (options.location) {

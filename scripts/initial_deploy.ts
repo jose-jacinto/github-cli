@@ -14,12 +14,14 @@ const config = {
   password: 'yapostgres' // Replace with your PostgreSQL password
 };
 
-const newDbName = 'github_profiler';
+const newDbName = 'github_fetch';
+const newDbNameTest = 'github_fetch_test';
 
 async function createDatabase(): Promise<void> {
   const db = pgp(config);
   try {
     await db.none(`CREATE DATABASE ${newDbName}`);
+    await db.none(`CREATE DATABASE ${newDbNameTest}`);
     console.log(`Database ${newDbName} created successfully.`);
   } catch (error) {
     // PostgreSQL error code for 'duplicate_database'

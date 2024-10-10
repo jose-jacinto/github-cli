@@ -17,7 +17,7 @@ describe('Database Functions', () => {
     const config = {
       host: 'localhost',
       port: 5432,
-      database: 'github_profiler_test',
+      database: 'github_fetch_test',
       user: 'postgres',
       password: 'yapostgres'
     };
