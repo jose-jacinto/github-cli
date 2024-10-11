@@ -9,6 +9,7 @@ export default [
       "object-curly-spacing": ["error", "always"],
       "no-unused-vars": "warn",
       "no-undef": "warn",
+      "@typescript-eslint/no-explicit-any": ["warn"],
       "indent": ["error", 2],
       "comma-dangle": ["error", {
         "arrays": "never",
@@ -17,7 +18,8 @@ export default [
         "exports": "never",
         "functions": "never" 
       }],
-      "max-len": ["error", { "code": 80, "tabWidth": 2 }]
+      "max-len": ["error", { "code": 80, "tabWidth": 2 }],
+      "keyword-spacing": ["error", { "before": true }]
     }
   }
 ];
